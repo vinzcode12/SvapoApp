@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Product, Customer, getProducts, getCustomers, saveProducts, saveCustomers } from '../lib/store';
+import { Product, Customer } from '../lib/store';
+import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { collection, onSnapshot, doc, setDoc, deleteDoc } from 'firebase/firestore';
 
 interface AppContextType {
   products: Product[];
@@ -20,34 +22,60 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [hasSeenOffer, setHasSeenOfferState] = useState<boolean>(false);
 
   useEffect(() => {
-    setProductsState(getProducts());
-    setCustomersState(getCustomers());
     const seen = sessionStorage.getItem('seenOffer') === 'true';
     setHasSeenOfferState(seen);
+
+    const unsubscribeProducts = onSnapshot(collection(db, 'products'), (snapshot) => {
+      const p = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+      setProductsState(p);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.GET, 'products');
+    });
+
+    const unsubscribeCustomers = onSnapshot(collection(db, 'customers'), (snapshot) => {
+      const c = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Customer));
+      setCustomersState(c);
+    }, (error) => {
+      // It's expected to fail if the user is not admin
+      console.log("Customer read error (usually means not auth'd as admin yet)", error.message);
+    });
+
+    return () => {
+      unsubscribeProducts();
+      unsubscribeCustomers();
+    };
   }, []);
 
-  const addProduct = (product: Product) => {
-    const newProducts = [...products, product];
-    setProductsState(newProducts);
-    saveProducts(newProducts);
+  const addProduct = async (product: Product) => {
+    try {
+      await setDoc(doc(db, 'products', product.id), { ...product, createdAt: Date.now() });
+    } catch (e) {
+      handleFirestoreError(e, OperationType.CREATE, `products/${product.id}`);
+    }
   };
 
-  const updateProduct = (updatedProduct: Product) => {
-    const newProducts = products.map(p => p.id === updatedProduct.id ? updatedProduct : p);
-    setProductsState(newProducts);
-    saveProducts(newProducts);
+  const updateProduct = async (updatedProduct: Product) => {
+    try {
+      await setDoc(doc(db, 'products', updatedProduct.id), updatedProduct, { merge: true });
+    } catch (e) {
+      handleFirestoreError(e, OperationType.UPDATE, `products/${updatedProduct.id}`);
+    }
   };
 
-  const deleteProduct = (id: string) => {
-    const newProducts = products.filter(p => p.id !== id);
-    setProductsState(newProducts);
-    saveProducts(newProducts);
+  const deleteProduct = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'products', id));
+    } catch (e) {
+      handleFirestoreError(e, OperationType.DELETE, `products/${id}`);
+    }
   };
 
-  const addCustomer = (customer: Customer) => {
-    const newCustomers = [...customers, customer];
-    setCustomersState(newCustomers);
-    saveCustomers(newCustomers);
+  const addCustomer = async (customer: Customer) => {
+    try {
+      await setDoc(doc(db, 'customers', customer.id), customer);
+    } catch (e) {
+      handleFirestoreError(e, OperationType.CREATE, `customers/${customer.id}`);
+    }
   };
 
   const setHasSeenOffer = (val: boolean) => {

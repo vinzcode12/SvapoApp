@@ -15,7 +15,7 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-50 text-slate-800 font-sans selection:bg-orange-500 selection:text-white pb-20 sm:pb-0 flex flex-col">
+        <div className="min-h-screen bg-gray-50 text-slate-800 font-sans selection:bg-orange-500 selection:text-white flex flex-col">
           <OfferModal />
           <Routes>
             <Route path="/" element={<Home />} />

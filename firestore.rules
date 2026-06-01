@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net
+    match /{document=**} { 
+      allow read, write: if false; 
+    }
+
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+    
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
+    function isAdmin() {
+      // Bootstrapped admin email
+      return isSignedIn() && request.auth.token.email == 'VincenzoMerolla78@gmail.com';
+    }
+
+    function isValidProduct(data) {
+      return data.keys().hasAll(['name', 'price']) 
+        && data.name is string && data.name.size() <= 200
+        && data.price is number
+        && (!('description' in data) || (data.description is string && data.description.size() <= 2000))
+        && (!('inShowcase' in data) || data.inShowcase is bool)
+        && (!('image' in data) || (data.image is string && data.image.size() <= 1048487))
+        && (!('features' in data) || (data.features is list && data.features.size() <= 50))
+        && (!('createdAt' in data) || data.createdAt is number);
+    }
+
+    function isValidCustomer(data) {
+      return data.keys().hasAll(['name', 'surname', 'phone', 'date'])
+        && data.name is string && data.name.size() <= 100
+        && data.surname is string && data.surname.size() <= 100
+        && data.phone is string && data.phone.size() <= 50
+        && data.date is string && data.date.size() <= 50;
+    }
+
+    match /products/{productId} {
+      allow read: if true; // Products are public for all users (read-only)
+      allow create: if isAdmin() && isValidId(productId) && isValidProduct(incoming()) && incoming().keys().size() <= 7;
+      allow update: if isAdmin() && isValidId(productId) && isValidProduct(incoming());
+      allow delete: if isAdmin() && isValidId(productId);
+    }
+
+    match /customers/{customerId} {
+      allow create: if isValidId(customerId) && isValidCustomer(incoming()) && incoming().keys().size() <= 4; // Anyone can subscribe to offers
+      allow read: if isAdmin(); // Only admins can see customer list
+      allow update, delete: if isAdmin();
+    }
+  }
+}

@@ -92,27 +92,27 @@ export default function Compare() {
 
     if (!product) {
       return (
-        <div className="flex-1 flex flex-col items-center justify-center p-8 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl min-h-[400px]">
+        <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-8 bg-gray-50 border-2 border-dashed border-gray-200 rounded-xl sm:rounded-2xl min-h-[300px] sm:min-h-[400px]">
           <button 
             onClick={() => setSelectorSide(side)}
-            className="flex flex-col items-center gap-4 text-gray-500 hover:text-orange-500 transition-colors group p-4"
+            className="flex flex-col items-center gap-2 sm:gap-4 text-gray-500 hover:text-orange-500 transition-colors group p-2 sm:p-4 text-center"
           >
-            <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center border border-gray-100 group-hover:border-orange-200 group-hover:bg-orange-50 transition-colors">
-              <Plus className="w-8 h-8" />
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white shadow-sm flex items-center justify-center border border-gray-100 group-hover:border-orange-200 group-hover:bg-orange-50 transition-colors">
+              <Plus className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
-            <span className="font-medium text-lg">Aggiungi prodotto</span>
+            <span className="font-medium text-sm sm:text-lg">Aggiungi prodotto</span>
           </button>
         </div>
       );
     }
 
     return (
-      <div className="flex-1 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-4">
+      <div className="flex-1 flex flex-col bg-white rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm relative overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-4">
         <button 
           onClick={() => side === 'left' ? setLeftProduct(null) : setRightProduct(null)}
-          className="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+          className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 p-1.5 sm:p-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
         
         <div className="aspect-[4/3] w-full bg-gray-50 relative">
@@ -123,18 +123,18 @@ export default function Compare() {
           )}
         </div>
         
-        <div className="p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
-          <p className="text-2xl font-extrabold text-orange-500 mb-6">€ {Number(product.price).toFixed(2)}</p>
+        <div className="p-3 sm:p-6 flex-grow flex flex-col">
+          <h3 className="text-sm sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2 line-clamp-2 sm:line-clamp-none leading-snug">{product.name}</h3>
+          <p className="text-base sm:text-2xl font-extrabold text-orange-500 mb-4 sm:mb-6">€ {Number(product.price).toFixed(2)}</p>
           
           {product.features && product.features.length > 0 ? (
-            <div className="mt-6 flex-grow">
-               <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Specifiche</h4>
-               <ul className="space-y-3">
+            <div className="mt-auto sm:mt-6 flex-grow">
+               <h4 className="text-[10px] sm:text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2 sm:mb-4 border-b border-gray-100 pb-1 sm:pb-2">Spec</h4>
+               <ul className="space-y-2 sm:space-y-3">
                  {product.features.map(f => (
-                   <li key={f.id} className="flex justify-between items-center text-sm">
-                     <span className="text-gray-500">{f.name}</span>
-                     <span className={`text-right ml-4 ${getComparisonColor(f, otherProduct)}`}>
+                   <li key={f.id} className="flex flex-col sm:flex-row justify-between sm:items-center text-xs sm:text-sm">
+                     <span className="text-gray-500 mb-0.5 sm:mb-0 sm:truncate sm:max-w-[50%]">{f.name}</span>
+                     <span className={`text-left sm:text-right sm:ml-4 tracking-tight leading-tight ${getComparisonColor(f, otherProduct)}`}>
                        {f.value}{f.unit ? ` ${f.unit}` : ''}
                      </span>
                    </li>
@@ -142,7 +142,7 @@ export default function Compare() {
                </ul>
             </div>
           ) : (
-             <div className="mt-6 text-sm text-gray-400 italic">Nessuna specifica tecnica inserita.</div>
+             <div className="mt-4 sm:mt-6 text-xs sm:text-sm text-gray-400 italic">Nessuna specifica tecnica inserita.</div>
           )}
         </div>
       </div>
@@ -159,7 +159,7 @@ export default function Compare() {
           <p className="mt-2 text-gray-600">Scegli due prodotti per confrontarne le caratteristiche.</p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 lg:gap-12 relative">
+        <div className="grid grid-cols-2 md:flex md:flex-row gap-2 sm:gap-6 lg:gap-12 relative">
           {renderPane('left', leftProduct)}
           
           {/* Central Divider / VS Badge */}

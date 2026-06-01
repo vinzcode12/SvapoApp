@@ -1,0 +1,41 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A product for sale in the shop",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "inShowcase": { "type": "boolean" },
+        "image": { "type": "string" },
+        "features": { "type": "array" },
+        "createdAt": { "type": "number", "description": "Timestamp" }
+      },
+      "required": ["name", "price"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Customer who subscribed for offers",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "surname": { "type": "string" },
+        "phone": { "type": "string" },
+        "date": { "type": "string" }
+      },
+      "required": ["name", "surname", "phone", "date"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Stores all products"
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Stores all customers"
+    }
+  }
+}

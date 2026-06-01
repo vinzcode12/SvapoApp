@@ -17,16 +17,17 @@ export default function Header() {
         <div className="flex gap-3 items-center">
           <Link 
             to="/compare" 
-            className="flex items-center gap-2 px-4 py-2 border border-orange-500 text-orange-500 font-bold rounded-full hover:bg-orange-50 transition-colors text-sm uppercase"
+            className="flex items-center justify-center gap-2 px-3 py-2 sm:px-4 border border-orange-500 text-orange-500 font-bold rounded-full hover:bg-orange-50 transition-colors text-sm uppercase"
           >
-            <Scale className="w-4 h-4" />
+            <Scale className="w-4 h-4 shrink-0" />
             <span className="hidden sm:inline">Confronta</span>
           </Link>
           
           <Link 
             to="/admin" 
-            className="px-4 py-2 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-colors text-sm uppercase"
+            className="flex items-center justify-center px-3 py-2 sm:px-4 bg-slate-900 text-white font-bold rounded-full hover:bg-slate-800 transition-colors text-sm uppercase"
           >
+            <span className="inline sm:hidden">Adm</span>
             <span className="hidden sm:inline">Admin</span>
           </Link>
         </div>

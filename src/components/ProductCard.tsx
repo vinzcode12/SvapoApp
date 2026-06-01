@@ -12,9 +12,9 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
   return (
     <div 
       onClick={() => onClick(product)}
-      className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full"
+      className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-gray-100 shadow-sm flex flex-col hover:shadow-md hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full"
     >
-      <div className="aspect-square bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-gray-300 relative overflow-hidden group">
+      <div className="aspect-square bg-gray-100 rounded-lg sm:rounded-xl mb-3 sm:mb-4 flex items-center justify-center text-gray-300 relative overflow-hidden group">
         {product.image ? (
           <img 
             src={product.image} 
@@ -28,7 +28,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
         )}
       </div>
       
-      <h3 className="font-bold text-slate-800 line-clamp-2">
+      <h3 className="font-bold text-sm sm:text-base text-slate-800 line-clamp-2 leading-tight">
         {product.name}
       </h3>
       <p className="text-xs text-slate-400 mb-2 mt-1 truncate">
@@ -36,7 +36,7 @@ export default function ProductCard({ product, onClick }: ProductCardProps) {
       </p>
       
       <div className="mt-auto flex items-center justify-between pt-2">
-        <span className="font-black text-orange-500 text-lg">
+        <span className="font-black text-orange-500 text-base sm:text-lg">
           € {Number(product.price).toFixed(2)}
         </span>
         <button className="p-1 text-slate-400 hover:text-orange-500 transition-colors relative z-10" onClick={(e) => { e.stopPropagation(); onClick(product) }}>

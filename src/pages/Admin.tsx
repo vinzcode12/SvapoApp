@@ -148,8 +148,10 @@ export default function Admin() {
         await addProduct(newProduct);
         setFormSuccess("Prodotto aggiunto con successo!");
       }
-      resetForm();
-      setTimeout(() => setFormSuccess(''), 3000);
+      setTimeout(() => {
+        resetForm();
+        setFormSuccess('');
+      }, 2000);
     } catch (err: any) {
       try {
         const parsed = JSON.parse(err.message);

@@ -6,10 +6,10 @@ import { collection, onSnapshot, doc, setDoc, deleteDoc } from 'firebase/firesto
 interface AppContextType {
   products: Product[];
   customers: Customer[];
-  addProduct: (product: Product) => void;
-  updateProduct: (product: Product) => void;
-  deleteProduct: (id: string) => void;
-  addCustomer: (customer: Customer) => void;
+  addProduct: (product: Product) => Promise<void>;
+  updateProduct: (product: Product) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
+  addCustomer: (customer: Customer) => Promise<void>;
   hasSeenOffer: boolean;
   setHasSeenOffer: (val: boolean) => void;
 }

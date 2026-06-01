@@ -15,11 +15,12 @@ service cloud.firestore {
     function isSignedIn() { return request.auth != null && request.auth.token.email_verified == true; }
     function isAdmin() {
       // Bootstrapped admin email
-      return isSignedIn() && request.auth.token.email == 'VincenzoMerolla78@gmail.com';
+      return isSignedIn() && request.auth.token.email.lower() == 'vincenzomerolla78@gmail.com'.lower();
     }
 
     function isValidProduct(data) {
       return data.keys().hasAll(['name', 'price']) 
+        && (!('id' in data) || data.id is string)
         && data.name is string && data.name.size() <= 200
         && data.price is number
         && (!('description' in data) || (data.description is string && data.description.size() <= 2000))
@@ -31,6 +32,7 @@ service cloud.firestore {
 
     function isValidCustomer(data) {
       return data.keys().hasAll(['name', 'surname', 'phone', 'date'])
+        && (!('id' in data) || data.id is string)
         && data.name is string && data.name.size() <= 100
         && data.surname is string && data.surname.size() <= 100
         && data.phone is string && data.phone.size() <= 50
@@ -39,13 +41,13 @@ service cloud.firestore {
 
     match /products/{productId} {
       allow read: if true; // Products are public for all users (read-only)
-      allow create: if isAdmin() && isValidId(productId) && isValidProduct(incoming()) && incoming().keys().size() <= 7;
+      allow create: if isAdmin() && isValidId(productId) && isValidProduct(incoming()) && incoming().keys().size() <= 9;
       allow update: if isAdmin() && isValidId(productId) && isValidProduct(incoming());
       allow delete: if isAdmin() && isValidId(productId);
     }
 
     match /customers/{customerId} {
-      allow create: if isValidId(customerId) && isValidCustomer(incoming()) && incoming().keys().size() <= 4; // Anyone can subscribe to offers
+      allow create: if isValidId(customerId) && isValidCustomer(incoming()) && incoming().keys().size() <= 5; // Anyone can subscribe to offers
       allow read: if isAdmin(); // Only admins can see customer list
       allow update, delete: if isAdmin();
     }

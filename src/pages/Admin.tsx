@@ -113,7 +113,7 @@ export default function Admin() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const saveProduct = (e: React.FormEvent) => {
+  const saveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
     setFormSuccess('');
@@ -140,15 +140,24 @@ export default function Admin() {
       features: validFeatures
     };
 
-    if (isEditing) {
-      updateProduct(newProduct);
-      setFormSuccess("Prodotto aggiornato con successo!");
-    } else {
-      addProduct(newProduct);
-      setFormSuccess("Prodotto aggiunto con successo!");
+    try {
+      if (isEditing) {
+        await updateProduct(newProduct);
+        setFormSuccess("Prodotto aggiornato con successo!");
+      } else {
+        await addProduct(newProduct);
+        setFormSuccess("Prodotto aggiunto con successo!");
+      }
+      resetForm();
+      setTimeout(() => setFormSuccess(''), 3000);
+    } catch (err: any) {
+      try {
+        const parsed = JSON.parse(err.message);
+        setFormError(parsed.error || 'Errore durante il salvataggio su database.');
+      } catch {
+        setFormError(err.message || 'Errore durante il salvataggio su database.');
+      }
     }
-    resetForm();
-    setTimeout(() => setFormSuccess(''), 3000);
   };
 
 

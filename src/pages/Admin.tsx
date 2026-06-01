@@ -46,7 +46,11 @@ export default function Admin() {
       await signInWithPopup(auth, googleProvider);
       setError('');
     } catch (err: any) {
-      setError(err.message || 'Errore di autenticazione');
+      if (err.code === 'auth/unauthorized-domain') {
+        setError('Dominio non autorizzato. Aggiungi questo URL ai domini autorizzati nella sezione Authentication > Settings della console Firebase.');
+      } else {
+        setError(err.message || 'Errore di autenticazione');
+      }
     }
   };
 

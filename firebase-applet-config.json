@@ -1,10 +1,10 @@
 {
-  "projectId": "level-voyager-xtxfk",
-  "appId": "1:478431573697:web:2a294b7f47592cd60dc640",
-  "apiKey": "AIzaSyDYKxg5oNs0qIwLFTzcJQp65ZrrGso8Z4M",
-  "authDomain": "level-voyager-xtxfk.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-3f354cb7-e9f6-4ec1-b730-70d2d2a412ac",
-  "storageBucket": "level-voyager-xtxfk.firebasestorage.app",
-  "messagingSenderId": "478431573697",
-  "measurementId": ""
+  "apiKey": "AIzaSyDU4MB9_lIkMffs5LMiE6BZ9O_AI5HLCys",
+  "authDomain": "svapoweb-7e736.firebaseapp.com",
+  "projectId": "svapoweb-7e736",
+  "storageBucket": "svapoweb-7e736.firebasestorage.app",
+  "messagingSenderId": "283818556165",
+  "appId": "1:283818556165:web:ff13178c7bc2ef3199956c",
+  "measurementId": "G-WJMWDN32G3",
+  "firestoreDatabaseId": "(default)"
 }
